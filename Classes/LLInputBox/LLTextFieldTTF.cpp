@@ -232,7 +232,11 @@ void LLTextFieldTTF::draw(void)
     lb = this->convertToWorldSpaceAR(lb);
 //    CCLOG("lb.x = %f, lb.y = %f", lb.x, lb.y);
     
-    getShaderProgram()->setUniformLocationWith1f(_nUniformLeft, lb.x);
+    float s = CCEGLView::sharedOpenGLView()->getScaleX();
+    float left_x = lb.x * s;
+//    CCLOG("left_x = %f",left_x);
+    
+    getShaderProgram()->setUniformLocationWith1f(_nUniformLeft, left_x);
     getShaderProgram()->setUniformLocationWith1f(_nUniformTransDis, _transDis);
     
     ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );

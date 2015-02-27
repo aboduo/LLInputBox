@@ -95,7 +95,7 @@ bool HelloWorld::init()
 
     
 #define FONT_NAME                       "Thonburi"
-#define FONT_SIZE                       44
+#define FONT_SIZE                       48
     
 //    CCTextFieldTTF* m_pTextField = CCTextFieldTTF::textFieldWithPlaceHolder("<click here for input>",
 //                                                            FONT_NAME,

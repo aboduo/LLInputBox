@@ -73,8 +73,16 @@ void LLInputBox::setFontFillColor(const ccColor3B &tintColor, bool mustUpdateTex
 
 bool LLInputBox::ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 {
-    _isMoved = false;
-    return true;
+    CCPoint p = this->convertTouchToNodeSpace(pTouch);
+    
+    CCRect bBox= CCRect(0, 0, m_obContentSize.width, m_obContentSize.height);
+    
+    if (this->isVisible() && bBox.containsPoint(p) )
+    {
+        _isMoved = false;
+        return true;
+    }
+    return false;
 }
 
 void LLInputBox::ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent)
