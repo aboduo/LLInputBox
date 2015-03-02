@@ -1,5 +1,5 @@
 #include "HelloWorldScene.h"
-#include "LLInputBox.h"
+
 
 
 USING_NS_CC;
@@ -108,49 +108,77 @@ bool HelloWorld::init()
 //    LLShaderSprite* sp = LLShaderSprite::create("Mudi_Box.png");
 //    sp->setPosition(CCPoint(100, 100));
 //    this->addChild(sp);
+
     
+    CCSize inputSize(480, 100);
     
-    LLInputBox* input = LLInputBox::createWithSize(CCSize(300, 100), "姓名", FONT_NAME, FONT_SIZE);
-    input->cocos2d::CCNode::setPosition( (visibleSize.width-300)/2, visibleSize.height - 200);
+    LLInputBox* input = LLInputBox::createWithSize(inputSize, "姓名", FONT_NAME, FONT_SIZE);
+    input->setMaxStringLength(10*3); //
+    input->setFontColor(ccORANGE);
+    input->setCursorColor(ccGRAY);
+    input->cocos2d::CCNode::setPosition( ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2 + 60 + 200) );
     input->setTouchPriority(-1000);
     input->setDelegate(this);
+    
+    input->ignoreAnchorPointForPosition(false);
+    input->setAnchorPoint(ccp(0.5, 0.5));
+    
     this->addChild(input);
+    
+    
+    LLInputBox* input1 = LLInputBox::createWithSize(inputSize, "密码", FONT_NAME, FONT_SIZE);
+    input1->setMaxStringLength(10*3); //
+    input1->setFontColor(ccGREEN);
+    input1->setCursorColor(ccGRAY);
+    input1->cocos2d::CCNode::setPosition( ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2 - 60 + 200) );
+    input1->setTouchPriority(-1000);
+    input1->setDelegate(this);
+    input1->ignoreAnchorPointForPosition(false);
+    input1->setAnchorPoint(ccp(0.5, 0.5));
+    this->addChild(input1);
     
     
     return true;
 }
 
-/**
- @brief    If the sender doesn't want to insert the text, return true;
- */
-bool HelloWorld::onTextFieldInsertText(cocos2d::CCTextFieldTTF *pSender, const char *text, int nLen)
-{
-    CCLOG("::::::::: input %d count", pSender->getCharCount());
-    CCLOG("::::::::: input %s", pSender->getString());
-    
-    if (pSender->getCharCount() > 30)
-    {
-        return true;
-    }
-    
-    return false;
-}
-
-
-bool HelloWorld::onTextFieldDeleteBackward(cocos2d::CCTextFieldTTF *pSender, const char *text, int nLen)
-{
-
-    CCLOG("::::::::: input %d count", pSender->getCharCount());
-    
-    return false;
-}
-
-
 void HelloWorld::menuCloseCallback(CCObject* pSender)
 {
     CCDirector::sharedDirector()->end();
-
+    
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - LLInputBoxDelegate
+
+bool HelloWorld::onInputBoxAttachWithIME(LLInputBox * sender)
+{
+   /////play some animation when keyboard openning
+    return false;
+}
+
+
+bool HelloWorld::onInputBoxDetachWithIME(LLInputBox * sender)
+{
+    /////play some animation when keyboard closing
+    return false;
+}
+
+/**
+ @brief    If the sender doesn't want to insert the text, return true;
+ */
+bool HelloWorld::beforeInputBoxInsertText(LLInputBox *pSender, const char *text, int nLen)
+{
+    ////could check the input here.
+    return false;
+}
+
+
+bool HelloWorld::beforeInputBoxDeleteBackward(LLInputBox * sender, const char * delText, int nLen)
+{    
+    return false;
+}
+

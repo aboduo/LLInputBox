@@ -2,7 +2,7 @@
 //  LLTextFieldTTF.cpp
 //  Template
 //
-//  Created by Sheng on 5/28/14.
+//  Created by Sheng on 10/1/14.
 //
 //
 
@@ -14,12 +14,18 @@ LLTextFieldTTF::LLTextFieldTTF()
 :_limitSize(CCSize(100, 100))
 ,_transDis(20)
 ,m_pCursorSprite(NULL)
+,_cursorColor(ccWHITE)
 {
     _nUniformLeft = -1;
     _nUniformTransDis = -1;
+    
+//    _cursorColor = ccRED;
+    
 }
 
-
+LLTextFieldTTF::~LLTextFieldTTF()
+{
+}
 
 LLTextFieldTTF* LLTextFieldTTF::textFieldWithPlaceHolder(const char *placeholder, const char *fontName, float fontSize)
 {
@@ -27,11 +33,12 @@ LLTextFieldTTF* LLTextFieldTTF::textFieldWithPlaceHolder(const char *placeholder
     if (pRet && pRet->initWithPlaceHolder("", fontName, fontSize))
     {
         pRet->autorelease();
+        pRet->_initCursorSprite();
         if (placeholder)
         {
             pRet->setPlaceHolder(placeholder);
         }
-        pRet->_initCursorSprite(fontSize);
+        
         
         return pRet;
     }
@@ -40,25 +47,47 @@ LLTextFieldTTF* LLTextFieldTTF::textFieldWithPlaceHolder(const char *placeholder
     return NULL;
 }
 
-void LLTextFieldTTF::_initCursorSprite(const int mHeight)
+void LLTextFieldTTF::_initCursorSprite()
 {
+    if (m_pCursorSprite)
+    {
+        m_pCursorSprite->removeFromParent();
+        m_pCursorSprite = NULL;
+    }
+    
+    int color = 0xff000000;
+    color += _cursorColor.r << 0;
+    color += _cursorColor.g << 8;
+    color += _cursorColor.b << 16;
+
+    
     ///// init cursor
     int column = kWidth_Cursor;
-    int pixels[mHeight][column];
-    for (int i=0; i<mHeight; ++i) {
+    int height = m_fFontSize;
+    unsigned int pixels[height][column];
+    for (int i=0; i<height; ++i) {
         for (int j=0; j<column; ++j) {
-            pixels[i][j] = 0xffffffff;
+//            pixels[i][j] = 0xffffffff;
+            pixels[i][j] = color;
         }
     }
+    
     CCTexture2D *texture = new CCTexture2D();
-    texture->initWithData(pixels, kCCTexture2DPixelFormat_RGB888, 1, 1, CCSizeMake(column, mHeight));
+    texture->initWithData(pixels, kCCTexture2DPixelFormat_RGB888, 1, 1, CCSizeMake(column, height));
     m_pCursorSprite = CCSprite::createWithTexture(texture);
     m_pCursorSprite->setPosition(ccp(m_obContentSize.width, m_obContentSize.height / 2));
     this->addChild(m_pCursorSprite);
     m_pCursorSprite->setVisible(false);
+    
     CCRepeatForever* m_pCursorAction = CCRepeatForever::create((CCActionInterval *) CCSequence::create(CCFadeOut::create(0.25f), CCFadeIn::create(0.25f), NULL));
     m_pCursorSprite->runAction(m_pCursorAction);
     texture->release();
+}
+
+void LLTextFieldTTF::setCursorColor(const ccColor3B &color)
+{
+    _cursorColor = color;
+    this->_initCursorSprite();
 }
 
 void LLTextFieldTTF::deleteBackward()
@@ -90,15 +119,6 @@ void LLTextFieldTTF::deleteBackward()
         CC_SAFE_DELETE(m_pInputText);
         m_pInputText = new std::string;
         m_nCharCount = 0;
-        CCLabelTTF::setString(m_pPlaceHolder->c_str());
-        
-        
-        if (m_pCursorSprite)
-        {
-            m_pCursorSprite->setPositionX(m_obContentSize.width);
-        }
-        
-        return;
     }
     
     // set new input text
@@ -113,7 +133,13 @@ void LLTextFieldTTF::setString(const char *text)
     
     if (m_pCursorSprite)
     {
-        m_pCursorSprite->setPositionX(m_obContentSize.width);
+        
+        if (m_pInputText && m_pInputText->length())
+        {
+            m_pCursorSprite->setPosition(ccp(m_obContentSize.width, m_obContentSize.height/2));
+        }
+        else
+            m_pCursorSprite->setPosition(ccp(0, m_obContentSize.height/2));
     }
     
     if ( (m_obContentSize.width) > _limitSize.width)
@@ -150,11 +176,14 @@ void LLTextFieldTTF::_initShader()
 {
     //    GLchar * vertSource = (GLchar*) CCString::createWithContentsOfFile(CCFileUtils::sharedFileUtils()->fullPathForFilename("shaders/leftTransparent.vsh").c_str())->getCString();
     //    GLchar * fragSource = (GLchar*) CCString::createWithContentsOfFile(CCFileUtils::sharedFileUtils()->fullPathForFilename("shaders/leftTransparent.fsh").c_str())->getCString();
+    //    pProgram->initWithVertexShaderByteArray(vertSource, fragSource);
+    
+    
     CCGLProgram* pProgram = new CCGLProgram();
     
     ////// compile v and f shader
-    //    pProgram->initWithVertexShaderByteArray(vertSource, fragSource);
-    pProgram->initWithVertexShaderFilename("shaders/leftTransparent.vsh", "shaders/leftTransparent.fsh");
+    pProgram->initWithVertexShaderFilename("leftTransparent.vsh", "leftTransparent.fsh");
+    
     //bind attribute
     pProgram->addAttribute(kCCAttributeNamePosition, kCCVertexAttrib_Position);
     pProgram->addAttribute(kCCAttributeNameColor, kCCVertexAttrib_Color);
@@ -222,20 +251,41 @@ void LLTextFieldTTF::setTexture(CCTexture2D *texture)
 
 void LLTextFieldTTF::draw(void)
 {
+    
+    if (m_pDelegate && m_pDelegate->onDraw(this))
+    {
+        return;
+    }
+    
     CC_PROFILER_START_CATEGORY(kCCProfilerCategorySprite, "CCSprite - draw");
     
     CCAssert(!m_pobBatchNode, "If CCSprite is being rendered by CCSpriteBatchNode, CCSprite#draw SHOULD NOT be called");
     
+    ccColor3B color = getColor();
+    if (!m_pInputText || !m_pInputText->length())
+    {
+        // draw placeholder
+        setColor(m_ColorSpaceHolder);
+    }
+    
     CC_NODE_DRAW_SETUP();
     
+    ////必须这么取得位置，因为本身的大小是变化的，要根据锚点来计算
     CCPoint lb(-_limitSize.width, 0);
     lb = this->convertToWorldSpaceAR(lb);
 //    CCLOG("lb.x = %f, lb.y = %f", lb.x, lb.y);
+    
+//    CCPoint lb1 = CCDirector::sharedDirector()->convertToUI(lb);
+//    CCLOG("lb1.x = %f, lb1.y = %f", lb1.x, lb1.y);
+//    
+//    CCPoint lb2 = CCDirector::sharedDirector()->convertToGL(lb);
+//    CCLOG("lb2.x = %f, lb2.y = %f", lb2.x, lb2.y);
     
     float s = CCEGLView::sharedOpenGLView()->getScaleX();
     float left_x = lb.x * s;
 //    CCLOG("left_x = %f",left_x);
     
+//    getShaderProgram()->setUniformLocationWith1f(_nUniformLeft, lb.x);
     getShaderProgram()->setUniformLocationWith1f(_nUniformLeft, left_x);
     getShaderProgram()->setUniformLocationWith1f(_nUniformTransDis, _transDis);
     
@@ -293,13 +343,16 @@ void LLTextFieldTTF::draw(void)
     CC_INCREMENT_GL_DRAWS(1);
     
     CC_PROFILER_STOP_CATEGORY(kCCProfilerCategorySprite, "CCSprite - draw");
+    
+    ////恢复原来的颜色
+    setColor(color);
 }
 
 
 
 //////////////////////////////////////////////////////////////////////////
-// CCIMEDelegate
 //////////////////////////////////////////////////////////////////////////
+#pragma mark - CCIMEDelegate
 
 bool LLTextFieldTTF::attachWithIME()
 {
@@ -312,11 +365,12 @@ bool LLTextFieldTTF::attachWithIME()
         {
             pGlView->setIMEKeyboardState(true);
         }
-        
         m_pCursorSprite->setVisible(true);
     }
+    
     return bRet;
 }
+
 
 bool LLTextFieldTTF::detachWithIME()
 {
@@ -330,9 +384,41 @@ bool LLTextFieldTTF::detachWithIME()
             pGlView->setIMEKeyboardState(false);
         }
         
+    }
+    
+    if (CCIMEDispatcher::sharedDispatcher()->getCurrentIMEDelegate() != this)
+    {
         m_pCursorSprite->setVisible(false);
     }
+    
     return bRet;
 }
 
+void LLTextFieldTTF::keyboardWillShow(CCIMEKeyboardNotificationInfo& info)
+{
+    
+}
+
+void LLTextFieldTTF::keyboardDidShow(CCIMEKeyboardNotificationInfo& info)
+{
+//    if (CCIMEDispatcher::sharedDispatcher()->getCurrentIMEDelegate() == this)
+//    {
+//        m_pCursorSprite->setVisible(true);
+//    }
+}
+
+void LLTextFieldTTF::keyboardWillHide(CCIMEKeyboardNotificationInfo& info)
+{
+//    if (CCIMEDispatcher::sharedDispatcher()->getCurrentIMEDelegate() == this)
+//    {
+//        m_pCursorSprite->setVisible(false);
+//    }
+    
+    m_pCursorSprite->setVisible(false);
+}
+
+void LLTextFieldTTF::keyboardDidHide(CCIMEKeyboardNotificationInfo& info)
+{
+//    m_pCursorSprite->setVisible(false);
+}
 

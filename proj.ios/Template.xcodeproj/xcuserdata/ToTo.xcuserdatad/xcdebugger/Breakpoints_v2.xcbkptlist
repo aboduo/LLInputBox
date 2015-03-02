@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../cocos2dx/text_input_node/CCIMEDispatcher.cpp"
-            timestampString = "442075162.100025"
+            timestampString = "446983548.98027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
+            startingLineNumber = "303"
+            endingLineNumber = "303"
             landmarkName = "CCIMEDispatcher::dispatchKeyboardWillHide(CCIMEKeyboardNotificationInfo&amp; info)"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../cocos2dx/text_input_node/CCIMEDispatcher.cpp"
-            timestampString = "442075173.172549"
+            timestampString = "446983548.98027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "257"
-            endingLineNumber = "257"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "CCIMEDispatcher::dispatchKeyboardWillShow(CCIMEKeyboardNotificationInfo&amp; info)"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,13 +74,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../../cocos2dx/text_input_node/CCIMEDispatcher.cpp"
-            timestampString = "442077311.674904"
+            timestampString = "446983548.98027"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "CCIMEDispatcher::dispatchInsertText(const char * pText, int nLen)"
             landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../cocos2dx/text_input_node/CCIMEDispatcher.h"
+            timestampString = "446983507.821321"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "70"
+            endingLineNumber = "70">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

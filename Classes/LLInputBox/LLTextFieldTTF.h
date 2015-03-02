@@ -2,7 +2,7 @@
 //  LLTextFieldTTF.h
 //  Template
 //
-//  Created by Sheng on 5/28/14.
+//  Created by Sheng on 10/1/14.
 //
 //
 
@@ -16,8 +16,10 @@ using namespace cocos2d;
 
 class LLTextFieldTTF: public CCTextFieldTTF
 {
+    friend class LLInputBox;
 public:
     LLTextFieldTTF();
+    ~LLTextFieldTTF();
     
     static LLTextFieldTTF* textFieldWithPlaceHolder(const char *placeholder, const char *fontName, float fontSize);
     
@@ -27,9 +29,7 @@ public:
     
     virtual void draw(void);
     
-    void setLimitSize(CCSize size);
-    void setTransDis(float dis);
-    
+/////////////////////////////////////////////////CCIMEDelegate
     /**
      @brief    Open keyboard and receive input text.
      */
@@ -40,11 +40,23 @@ public:
      */
     virtual bool detachWithIME();
     
+    //////////////////////////////////////////////////////////////////////////
+    // keyboard show/hide notification
+    //////////////////////////////////////////////////////////////////////////
+    virtual void keyboardWillShow(CCIMEKeyboardNotificationInfo& info);
+    virtual void keyboardDidShow(CCIMEKeyboardNotificationInfo& info);
+    virtual void keyboardWillHide(CCIMEKeyboardNotificationInfo& info);
+    virtual void keyboardDidHide(CCIMEKeyboardNotificationInfo& info);
+    
     
 protected:
     virtual void updateBlendFunc(void);
     
     virtual void deleteBackward();
+    
+    void setLimitSize(CCSize size);
+    void setTransDis(float dis);
+    void setCursorColor(const ccColor3B &color);
     
 private:
     GLint       _nUniformLeft;
@@ -55,9 +67,9 @@ private:
     CCSize  _limitSize;
     float   _transDis;
     
+    ccColor3B   _cursorColor;
     
-    void _initCursorSprite(const int mHeight);
-    
+    void _initCursorSprite();
     
     void _initShader();
 

@@ -205,9 +205,10 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		7855E0E1153FEF240059DD9A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 7855E0DF153FEF240059DD9A /* Default.png */; };
-		993AC6E11A5AD40C001E4E0B /* shaders in Resources */ = {isa = PBXBuildFile; fileRef = 993AC6E01A5AD40C001E4E0B /* shaders */; };
 		993AC6F51A5AD430001E4E0B /* LLInputBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 993AC6EA1A5AD430001E4E0B /* LLInputBox.cpp */; };
 		993AC6F61A5AD430001E4E0B /* LLTextFieldTTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 993AC6EC1A5AD430001E4E0B /* LLTextFieldTTF.cpp */; };
+		996072741AA469A000C61125 /* leftTransparent.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 996072721AA469A000C61125 /* leftTransparent.fsh */; };
+		996072751AA469A000C61125 /* leftTransparent.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 996072731AA469A000C61125 /* leftTransparent.vsh */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712461292920000B8313A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB212928DE900B8313A /* libxml2.dylib */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -645,11 +646,12 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7855E0DF153FEF240059DD9A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
-		993AC6E01A5AD40C001E4E0B /* shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; name = shaders; path = ../Classes/LLInputBox/shaders; sourceTree = "<group>"; };
 		993AC6EA1A5AD430001E4E0B /* LLInputBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LLInputBox.cpp; sourceTree = "<group>"; };
 		993AC6EB1A5AD430001E4E0B /* LLInputBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLInputBox.h; sourceTree = "<group>"; };
 		993AC6EC1A5AD430001E4E0B /* LLTextFieldTTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LLTextFieldTTF.cpp; sourceTree = "<group>"; };
 		993AC6ED1A5AD430001E4E0B /* LLTextFieldTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLTextFieldTTF.h; sourceTree = "<group>"; };
+		996072721AA469A000C61125 /* leftTransparent.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = leftTransparent.fsh; sourceTree = "<group>"; };
+		996072731AA469A000C61125 /* leftTransparent.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = leftTransparent.vsh; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB212928DE900B8313A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -1485,7 +1487,6 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				993AC6E01A5AD40C001E4E0B /* shaders */,
 				1AFAF8B916D35E4900DB1158 /* CloseNormal.png */,
 				1AFAF8BA16D35E4900DB1158 /* CloseSelected.png */,
 				1AFAF8BB16D35E4900DB1158 /* HelloWorld.png */,
@@ -1504,6 +1505,7 @@
 		993AC6E91A5AD430001E4E0B /* LLInputBox */ = {
 			isa = PBXGroup;
 			children = (
+				996072711AA469A000C61125 /* shaders */,
 				993AC6EA1A5AD430001E4E0B /* LLInputBox.cpp */,
 				993AC6EB1A5AD430001E4E0B /* LLInputBox.h */,
 				993AC6EC1A5AD430001E4E0B /* LLTextFieldTTF.cpp */,
@@ -1511,6 +1513,15 @@
 			);
 			name = LLInputBox;
 			path = ../Classes/LLInputBox;
+			sourceTree = "<group>";
+		};
+		996072711AA469A000C61125 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				996072721AA469A000C61125 /* leftTransparent.fsh */,
+				996072731AA469A000C61125 /* leftTransparent.vsh */,
+			);
+			path = shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1583,13 +1594,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7855E0E1153FEF240059DD9A /* Default.png in Resources */,
-				993AC6E11A5AD40C001E4E0B /* shaders in Resources */,
 				D4EF949A15BD2D8B00D803EB /* Icon-57.png in Resources */,
 				D4EF949C15BD2D8E00D803EB /* Icon-114.png in Resources */,
 				D4EF949E15BD2D9600D803EB /* Icon-72.png in Resources */,
 				D4EF94A015BD2D9800D803EB /* Icon-144.png in Resources */,
+				996072741AA469A000C61125 /* leftTransparent.fsh in Resources */,
 				D41A0AD1160F154A004552AE /* Default-568h@2x.png in Resources */,
 				D446FD6E16102124000ADA7B /* Default@2x.png in Resources */,
+				996072751AA469A000C61125 /* leftTransparent.vsh in Resources */,
 				15A3D9961682F7F9002FB0C5 /* CMakeLists.txt in Resources */,
 				1AFAF8BC16D35E4900DB1158 /* CloseNormal.png in Resources */,
 				1AFAF8BD16D35E4900DB1158 /* CloseSelected.png in Resources */,
